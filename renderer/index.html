@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Streak System HUD</title>
+  <!-- Google Fonts for premium modern typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- BRUTAL LOCKOUT SCREEN FOR PERMANENT FAILURE -->
+  <div id="failure-screen" class="hidden">
+    <div class="glitch-container">
+      <h1 class="glitch-text" data-text="SYSTEM FAILURE">SYSTEM FAILURE</h1>
+      <div class="failure-divider"></div>
+      <p class="failure-message-title">STREAK BROKEN</p>
+      <p class="failure-subtitle">You missed a daily commitment. The protocol has terminated.</p>
+      <p class="failure-subtext">As per your hardcore rules, the streak system is locked forever.</p>
+      
+      <div class="history-grid-preview">
+        <!-- Will show yesterday's failed items -->
+        <h3>Last Recorded System State:</h3>
+        <div id="failed-items-list"></div>
+      </div>
+      
+      <div class="backdoor-zone" id="backdoor-reset" title="Click 10 times to override lock">
+        • PROTOCOL TERMINATED •
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN HUD WORKSPACE -->
+  <div id="hud-container">
+    
+    <!-- HEADER -->
+    <header class="hud-header">
+      <div class="hud-title-zone">
+        <div class="pulse-indicator"></div>
+        <div class="title-details">
+          <h1>STREAK SYSTEM HUD</h1>
+          <span id="hud-date">May 29, 2026</span>
+        </div>
+      </div>
+      
+      <!-- Completion Progress Bar -->
+      <div class="hud-progress-container">
+        <div class="progress-info">
+          <span>DAILY PROTOCOL COMPLETION</span>
+          <span id="progress-percentage">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div id="progress-bar-fill"></div>
+        </div>
+      </div>
+
+      <!-- Lock Interactivity Toggle (Always interactive so user can hover & click) -->
+      <button id="lock-toggle" class="interactive-el locked" title="Ctrl + Shift + Alt + S to toggle">
+        <div class="lock-icon">
+          <svg class="svg-lock" viewBox="0 0 24 24" width="18" height="18">
+            <path class="lock-body" d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10z"/>
+            <path class="lock-shackle" d="M12 13c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+          </svg>
+        </div>
+        <span id="lock-text">HUD LOCKED</span>
+      </button>
+    </header>
+
+    <!-- STREAK BANNER -->
+    <section class="streak-banner">
+      <div class="streak-label">ACTIVE STREAK</div>
+      <div class="streak-counter-wrapper">
+        <span class="streak-number" id="streak-count">0</span>
+        <span class="streak-suffix">DAYS</span>
+      </div>
+      <div class="streak-message" id="streak-msg">Initialize daily protocol. Stay hardcore.</div>
+    </section>
+
+    <!-- CHECKLIST GRID (3 columns) -->
+    <main class="checklist-grid">
+      <!-- Generated dynamically in index.js -->
+    </main>
+
+    <!-- FOOTER WITH WEEKLY/MONTHLY/YEARLY TABS -->
+    <footer class="hud-footer">
+      <div class="system-time" id="system-clock">02:31:09</div>
+      <div class="footer-buttons">
+        <button class="footer-btn locked-tab interactive-el" title="Weekly Goals - Daily Mode Only">
+          <span>WEEKLY</span>
+          <svg viewBox="0 0 24 24" width="12" height="12"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>
+        </button>
+        <button class="footer-btn locked-tab interactive-el" title="Monthly Goals - Daily Mode Only">
+          <span>MONTHLY</span>
+          <svg viewBox="0 0 24 24" width="12" height="12"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>
+        </button>
+        <button class="footer-btn locked-tab interactive-el" title="Yearly Goals - Daily Mode Only">
+          <span>YEARLY</span>
+          <svg viewBox="0 0 24 24" width="12" height="12"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>
+        </button>
+      </div>
+    </footer>
+    
+  </div>
+
+  <!-- Sound Effects for Completion -->
+  <audio id="sound-complete" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav" preload="auto"></audio>
+  <audio id="sound-chime" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" preload="auto"></audio>
+  <audio id="sound-alarm" src="https://assets.mixkit.co/active_storage/sfx/911/911-84.wav" preload="auto"></audio>
+
+  <script src="index.js"></script>
+</body>
+</html>

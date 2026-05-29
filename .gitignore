@@ -1,0 +1,61 @@
+# ==========================================
+# Node.js & Dependency Tree
+# ==========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.eslintcache
+
+# ==========================================
+# Electron Distribution & Build Outputs
+# ==========================================
+# Common packaging output directories (electron-packager, electron-builder)
+dist/
+build/
+out/
+release/
+*.asar
+
+# ==========================================
+# Native Build Artifacts (node-gyp / C++)
+# ==========================================
+# Generated if your project compiles native C/C++ dependencies or node-addons
+build/Debug/
+build/Release/
+.lock-wscript
+config.gypi
+
+# ==========================================
+# Environment & Secrets
+# ==========================================
+# Never commit private API keys, certs, or environment variables
+.env
+.env.local
+.env.*.local
+*.pfx
+*.p12
+*.pem
+*.key
+
+# ==========================================
+# Operating System Artifacts
+# ==========================================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ==========================================
+# IDEs and Editors
+# ==========================================
+.vscode/
+# Exception: Commit .vscode/launch.json if you want to share debug configurations
+!.vscode/launch.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp

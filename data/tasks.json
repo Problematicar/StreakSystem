@@ -1,0 +1,93 @@
+{
+  "daily": [
+    {
+      "category": "Chinese",
+      "items": [
+        {
+          "id": "chinese_skill_streak",
+          "name": "ChineseSkill Streak",
+          "type": "checkbox"
+        }
+      ]
+    },
+    {
+      "category": "Clash Royale",
+      "items": [
+        {
+          "id": "clash_royale_stream",
+          "name": "Twitch/Youtube/TikTok Stream",
+          "type": "checkbox"
+        },
+        {
+          "id": "clash_royale_daily_video",
+          "name": "Daily Video",
+          "type": "checkbox"
+        }
+      ]
+    },
+    {
+      "category": "Physical",
+      "items": [
+        {
+          "id": "physical_pushups",
+          "name": "25 Pushups",
+          "type": "counter",
+          "target": 25
+        }
+      ]
+    },
+    {
+      "category": "Mental",
+      "items": [
+        {
+          "id": "mental_meditation",
+          "name": "30 Minutes Meditation",
+          "type": "timer",
+          "duration": 1800,
+          "pretime": 30,
+          "link": "https://youtu.be/vBGaDlBSik4"
+        }
+      ]
+    },
+    {
+      "category": "Health",
+      "items": [
+        {
+          "id": "health_multicentrum",
+          "name": "Multicentrum (1 pill)",
+          "type": "checkbox"
+        },
+        {
+          "id": "health_fibra",
+          "name": "Fibra (400ml, 2 scoops)",
+          "type": "checkbox"
+        },
+        {
+          "id": "health_antilip",
+          "name": "Antilip Colesterolo (1 pill)",
+          "type": "checkbox"
+        }
+      ]
+    },
+    {
+      "category": "Hygiene",
+      "items": [
+        {
+          "id": "hygiene_shower",
+          "name": "Shower",
+          "type": "checkbox"
+        },
+        {
+          "id": "hygiene_deodorant",
+          "name": "Deodorant",
+          "type": "checkbox"
+        },
+        {
+          "id": "hygiene_teeth",
+          "name": "Teeth",
+          "type": "checkbox"
+        }
+      ]
+    }
+  ]
+}

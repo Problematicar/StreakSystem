@@ -1,0 +1,19 @@
+{
+  "lastActiveDate": "2026-05-29",
+  "streak": 0,
+  "isFailedForever": false,
+  "checkedItems": {
+    "chinese_skill_streak": true,
+    "clash_royale_stream": true,
+    "clash_royale_daily_video": true,
+    "physical_pushups": 1,
+    "mental_meditation": false,
+    "health_multicentrum": true,
+    "health_fibra": true,
+    "health_antilip": true,
+    "hygiene_shower": true,
+    "hygiene_deodorant": true,
+    "hygiene_teeth": true
+  },
+  "pushupsTarget": 25
+}
