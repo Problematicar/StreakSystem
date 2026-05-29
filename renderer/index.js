@@ -813,9 +813,13 @@ async function handleTimerClick(item, btnId) {
         try { soundComplete.play(); } catch (e) {}
         
         // Show native notification
-        new Notification("Streak System HUD", {
-          body: "Meditation Protocol Complete! Focus restored."
-        });
+        try {
+          new Notification("Streak System HUD", {
+            body: "Meditation Protocol Complete! Focus restored."
+          });
+        } catch (err) {
+          console.warn("Failed to show notification:", err);
+        }
         
         updateCategoryCardState(item.id);
         updateProgressUI();
