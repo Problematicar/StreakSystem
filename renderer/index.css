@@ -800,51 +800,13 @@ body {
    LOCKED STATE: Suppress ALL hover effects except lock button.
    The body gets class "hud-locked" when interactivity is off.
    ============================================================ */
-body.hud-locked #hud-container:hover {
-  border-color: var(--border-panel);
+
+body.hud-locked #hud-container {
+  pointer-events: none;
 }
 
-body.hud-locked .category-card:hover {
-  border-color: var(--border-panel);
-  background: var(--bg-panel);
-}
-
-body.hud-locked .category-card:hover h2 {
-  border-color: var(--text-dark);
-}
-
-body.hud-locked .task-item:hover {
-  background: rgba(255, 255, 255, 0.02);
-  border-color: rgba(255, 255, 255, 0.02);
-}
-
-body.hud-locked .checkbox-container:hover input ~ .checkmark {
-  border-color: var(--text-dark);
-}
-
-body.hud-locked .counter-btn:hover {
-  border-color: var(--text-dark);
-  color: var(--text-dim);
-  background: rgba(255, 255, 255, 0.02);
-}
-
-body.hud-locked .timer-control-btn:hover {
-  border-color: var(--text-dark);
-  background: var(--bg-panel);
-}
-
-body.hud-locked .footer-btn.locked-tab:hover {
-  border-color: var(--border-panel);
-  color: var(--text-dark);
-}
-
-body.hud-locked .task-label a:hover {
-  color: #3b82f6;
-  border-bottom-style: dashed;
-}
-
-body.hud-locked .backdoor-zone:hover {
-  color: var(--text-dark);
+body.hud-locked #lock-toggle {
+  pointer-events: auto;
 }
 
 /* Cursor should look non-interactive when locked (except lock btn) */

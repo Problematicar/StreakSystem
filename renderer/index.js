@@ -211,10 +211,13 @@ function verifyAllTasksCompleted() {
   tasksData.daily.forEach(category => {
     category.items.forEach(item => {
       const stateVal = stateData.checkedItems[item.id];
-      if (item.type === 'checkbox' || item.type === 'timer' || item.id === 'physical_pushups') {
+      if (item.id === 'physical_pushups') {
+        const totalSets = Math.floor((stateData.pushupsTarget || 25) / 25);
+        if ((stateVal || 0) < totalSets) allDone = false;
+      } else if (item.type === 'checkbox' || item.type === 'timer') {
         if (stateVal !== true) allDone = false;
       } else if (item.type === 'counter') {
-        if (stateVal < item.target) allDone = false;
+        if ((stateVal || 0) < item.target) allDone = false;
       }
     });
   });
@@ -225,7 +228,9 @@ function verifyAllTasksCompleted() {
 function resetDailyTasks() {
   tasksData.daily.forEach(category => {
     category.items.forEach(item => {
-      if (item.type === 'checkbox' || item.type === 'timer' || item.id === 'physical_pushups') {
+      if (item.id === 'physical_pushups') {
+        stateData.checkedItems[item.id] = 0;
+      } else if (item.type === 'checkbox' || item.type === 'timer') {
         stateData.checkedItems[item.id] = false;
       } else if (item.type === 'counter') {
         stateData.checkedItems[item.id] = 0;
@@ -443,7 +448,42 @@ function renderChecklists() {
         input.type = 'checkbox';
         input.checked = timerCompleted;
         input.dataset.itemId = item.id;
-        input.disabled = true; // Auto checks on timer completion, or click to bypass
+        input.disabled = false;
+        input.addEventListener('change', async (e) => {
+          const isChecked = e.target.checked;
+          const btn = document.getElementById(`timer-btn-${item.id}`);
+          const statusLabel = document.getElementById(`timer-status-${item.id}`);
+          const timeVal = document.getElementById(`timer-time-${item.id}`);
+          
+          stateData.checkedItems[item.id] = isChecked;
+          
+          if (isChecked) {
+            li.classList.add('done');
+            try { soundComplete.play(); } catch (err) {}
+            if (btn) {
+              if (btn.classList.contains('running') && activeTimerInterval) {
+                clearInterval(activeTimerInterval);
+                activeTimerInterval = null;
+              }
+              btn.textContent = 'RESET';
+              btn.classList.remove('running');
+            }
+            if (statusLabel) statusLabel.textContent = 'COMPLETED';
+          } else {
+            li.classList.remove('done');
+            if (btn) {
+              btn.textContent = 'START';
+              btn.classList.remove('running');
+            }
+            if (statusLabel) statusLabel.textContent = 'READY';
+            if (timeVal) timeVal.textContent = formatTimeStr(item.duration);
+            updateTimerRing(item.id, item.duration, item.duration, false);
+          }
+          
+          updateCategoryCardState(item.id);
+          updateProgressUI();
+          await window.api.writeFile(paths.statePath, JSON.stringify(stateData, null, 2));
+        });
         
         const checkmark = document.createElement('span');
         checkmark.classList.add('checkmark');
@@ -591,7 +631,7 @@ async function handleCounterChange(itemId, delta, target) {
 }
 
 async function handlePushupsTargetChange(delta) {
-  stateData.pushupsTarget = Math.max(25, (stateData.pushupsTarget || 25) + delta);
+  stateData.pushupsTarget = Math.max(25, Math.min(100, (stateData.pushupsTarget || 25) + delta));
   
   const maxSets = Math.floor(stateData.pushupsTarget / 25);
   if ((stateData.checkedItems['physical_pushups'] || 0) > maxSets) {
@@ -637,10 +677,13 @@ function updateCategoryCardState(itemId) {
       let cardDone = true;
       foundCategory.items.forEach(itm => {
         const stateVal = stateData.checkedItems[itm.id];
-        if (itm.type === 'checkbox' || itm.type === 'timer' || itm.id === 'physical_pushups') {
+        if (itm.id === 'physical_pushups') {
+          const totalSets = Math.floor((stateData.pushupsTarget || 25) / 25);
+          if ((stateVal || 0) < totalSets) cardDone = false;
+        } else if (itm.type === 'checkbox' || itm.type === 'timer') {
           if (stateVal !== true) cardDone = false;
         } else if (itm.type === 'counter') {
-          if (stateVal < itm.target) cardDone = false;
+          if ((stateVal || 0) < itm.target) cardDone = false;
         }
       });
       
@@ -809,10 +852,13 @@ function updateProgressUI() {
     category.items.forEach(item => {
       totalTasks++;
       const val = stateData.checkedItems[item.id];
-      if (item.type === 'checkbox' || item.type === 'timer' || item.id === 'physical_pushups') {
+      if (item.id === 'physical_pushups') {
+        const totalSets = Math.floor((stateData.pushupsTarget || 25) / 25);
+        if ((val || 0) >= totalSets) completedTasks++;
+      } else if (item.type === 'checkbox' || item.type === 'timer') {
         if (val === true) completedTasks++;
       } else if (item.type === 'counter') {
-        if (val >= item.target) completedTasks++;
+        if ((val || 0) >= item.target) completedTasks++;
       }
     });
   });
@@ -837,12 +883,13 @@ function triggerFailureLockout() {
       let done = false;
       let displayVal = "";
       
-      if (item.type === 'checkbox' || item.type === 'timer' || item.id === 'physical_pushups') {
+      if (item.id === 'physical_pushups') {
+        const totalSets = Math.floor((stateData.pushupsTarget || 25) / 25);
+        done = (val || 0) >= totalSets;
+        displayVal = done ? `[✓] Done (${stateData.pushupsTarget || 25})` : `[ ] Missed (${stateData.pushupsTarget || 25})`;
+      } else if (item.type === 'checkbox' || item.type === 'timer') {
         done = val === true;
         displayVal = done ? "[✓] Done" : "[ ] Missed";
-        if (item.id === 'physical_pushups') {
-          displayVal = done ? `[✓] Done (${stateData.pushupsTarget || 25})` : `[ ] Missed (${stateData.pushupsTarget || 25})`;
-        }
       } else if (item.type === 'counter') {
         const curVal = val || 0;
         done = curVal >= item.target;
@@ -947,10 +994,13 @@ async function generateHistoryPng(dateStr, perfect) {
       const val = stateData.checkedItems[item.id];
       let done = false;
       
-      if (item.type === 'checkbox' || item.type === 'timer' || item.id === 'physical_pushups') {
+      if (item.id === 'physical_pushups') {
+        const totalSets = Math.floor((stateData.pushupsTarget || 25) / 25);
+        done = (val || 0) >= totalSets;
+      } else if (item.type === 'checkbox' || item.type === 'timer') {
         done = val === true;
       } else if (item.type === 'counter') {
-        done = val >= item.target;
+        done = (val || 0) >= item.target;
       }
       
       const col = itemIndex % 3;

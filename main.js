@@ -38,6 +38,7 @@ function createWindow() {
     height: hudHeight,
     x: Math.floor((width - hudWidth) / 2),
     y: Math.floor((height - hudHeight) / 2),
+    type: 'desktop', // Anchors to desktop, keeping it below all other apps
     transparent: true,
     frame: false,
     alwaysOnTop: false,
